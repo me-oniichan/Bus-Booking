@@ -34,6 +34,8 @@ class BusSchedule(models.Model):
     schedule_date = models.ForeignKey(Weeks, on_delete=models.CASCADE)
     schedule_time = models.TimeField()
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.station.station_name
 
 
 # Model to store bus booking

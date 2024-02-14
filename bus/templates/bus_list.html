@@ -13,6 +13,9 @@
                 <th>Bus Capacity</th>
                 <th>Bus Fare</th>
                 <th>Bus Route</th>
+                {% if is_superuser %}
+                <th>Delete</th>
+                {% endif %}
             </tr>
             {% for bus in buses %}
 
@@ -22,6 +25,15 @@
                 <td>{{ bus.bus_capacity }}</td>
                 <td>{{ bus.bus_fare }}</td>
                 <td><a href="/bus/show_route/{{ bus.bus_id }}">Route</a></td>
+                {% if is_superuser %}
+                <td>
+                    <form action="/bus/delete_bus/" method="post">
+                        <input type="hidden" name="bus_id" value="{{ bus.bus_id }}">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>

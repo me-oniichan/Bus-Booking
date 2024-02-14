@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1>Welcome to the Dashboard</h1>
+        <form action="/bus/dashboard/" method="post">
+            {% csrf_token %}
+            <select name="source_id">
+                <option value="">Select Source</option>
+                {% for station in stations %}
+                <option value="{{ station.station_id }}">{{ station.station_name }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="destination_id">
+                <option value="">Select Destination</option>
+                {% for station in stations %}
+                <option value="{{ station.station_id }}">{{ station.station_name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Search">
+        </form>
+
+        {% if buses %}
+        <table>
+            <tr>
+                <th>Bus Name</th>
+                <th>Bus Number</th>
+                <th>Bus Capacity</th>
+                <th>Bus Fare</th>
+                <th>Book</th>
+            </tr>
+            {% for bus in buses %}
+
+            <tr>
+                <td>{{ bus.bus_name }}</td>
+                <td>{{ bus.bus_number }}</td>
+                <td>{{ bus.bus_capacity }}</td>
+                <td>{{ bus.bus_fare }}</td>
+                <td><a href="/bus/show_route/{{ bus.bus_id }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        
+    </body>
+</html>

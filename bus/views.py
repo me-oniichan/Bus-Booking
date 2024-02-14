@@ -25,11 +25,11 @@ def create_route(request):
         if request.method == 'POST':
             form = formset_factory(ScheduleForm)
             forms = form(request.POST)
-            print(forms.is_valid())
             sid = random.randint(1, 100000)
+            bus = Bus.objects.get(bus_id = int(request.POST["bus_id"]))
             if forms.is_valid():
                 for form in forms:
-                    schedule = BusSchedule(schedule_id=sid, bus=form.cleaned_data['bus'], schedule_date=form.cleaned_data['schedule_date'], schedule_time=form.cleaned_data['schedule_time'], station=form.cleaned_data['station'])
+                    schedule = BusSchedule(schedule_id=sid, bus=bus, schedule_date=form.cleaned_data['schedule_date'], schedule_time=form.cleaned_data['schedule_time'], station=form.cleaned_data['station'])
                     schedule.save()
             return redirect('/bus/bus_list')
         else:
@@ -42,12 +42,25 @@ def show_route(request, bus_id):
     try:
         bus = Bus.objects.get(bus_id=bus_id)
         route_ids = BusSchedule.objects.filter(bus=bus)
-
-        return render(request, 'show_route.html', {'route': route_ids, 'is_superuser': request.user.is_superuser, 'bus_id': bus_id, "forms": formset_factory(ScheduleForm, extra=1)})
+        return render(request, 'show_route.html', {'routes': route_ids, 'is_superuser': request.user.is_superuser, 'bus_id': bus_id, "forms": formset_factory(ScheduleForm, extra=1)})
     except Bus.DoesNotExist:
         return HttpResponseNotFound();
 
 def bus_list(request):
     '''List all the buses'''
     buses = Bus.objects.all()
-    return render(request, 'bus_list.html', {'buses': buses})
+    return render(request, 'bus_list.html', {'buses': buses, 'is_superuser': request.user.is_superuser})
+
+def delete_bus(request):
+    '''Delete a bus'''
+    if(request.user.is_superuser and request.method == "POST"):
+        try:
+            bus = Bus.objects.get(bus_id=int(request.POST["bus_id"]))
+            bus.delete()
+            return redirect('/bus/bus_list')
+        except Bus.DoesNotExist:
+            return HttpResponseNotFound();
+    else:
+        return HttpResponseBadRequest();
+
+

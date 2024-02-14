@@ -20,21 +20,11 @@
                 <div>
                     <input type="hidden" name="form-TOTAL_FORMS" id="id_form-TOTAL_FORMS">
                     <input type="hidden" name="form-INITIAL_FORMS" id="id_form-INITIAL_FORMS" value="0">
+                    <input type="hidden" name="bus_id" value="{{ bus_id }}">
                 </div>
             {% for form in forms %}
             <div class="form-group">
 
-            <div class="form-field">
-                <label for="{{ form.bus.id_for_label }}">Weekday: </label>
-                {{ form.bus }}
-                {% if form.bus.errors %}
-                <ul>
-                    {% for error in form.bus.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
             <div class="form-field">
                 <label for="{{ form.schedule_date.id_for_label }}">Weekday: </label>
                 {{ form.schedule_date }}
