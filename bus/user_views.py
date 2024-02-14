@@ -20,6 +20,14 @@ def dashboard(request):
             results = [item[0] for item in results]
             # use resulting primary key to extract Bus 
             buses = Bus.objects.filter(bus_id__in=results) 
+            for bus in buses:
+                percent = bus.reserved/bus.bus_capacity * 100
+                if percent > 60:
+                    bus.color = "red"
+                elif percent > 40:
+                    bus.color = "yellow"
+                else:
+                    bus.color = "green"
             return render(request, "dashboard.html",{
                 'stations': stations,
                 'buses': buses
@@ -27,6 +35,16 @@ def dashboard(request):
 
     stations = Station.objects.all()
     buses = Bus.objects.all()
+    
+    for bus in buses:
+        percent = bus.reserved/bus.bus_capacity * 100
+        if percent > 80:
+            bus.color = "red"
+        elif percent > 40:
+            bus.color = "yellow"
+        else:
+            bus.color = "green"
+
     return render(request, "dashboard.html",{
         'stations': stations,
         'buses': buses
@@ -35,18 +53,25 @@ def dashboard(request):
 
 def bus_details(request, bus_id):
     bus = Bus.objects.get(bus_id=bus_id)
+    bookings = [ booking.seat_number for booking in BusBooking.objects.filter(bus_id=bus)]
+    user_booking = [booking.seat_number for booking in BusBooking.objects.filter(user_id=request.user, bus_id=bus)]
     return render(request, "bus_details.html",{
         'bus': bus,
         'row1': range(1, bus.bus_capacity+1, 4),
         "row2": range(2, bus.bus_capacity+1, 4),
         "row3": range(3, bus.bus_capacity+1, 4),
-        "row4": range(4, bus.bus_capacity+1, 4)
+        "row4": range(4, bus.bus_capacity+1, 4),
+        "bookings": bookings,
+        "user_booking": user_booking,
     })
 
 @login_required
 def book_bus(request):
     if request.method == 'POST':
         bus = Bus.objects.get(bus_id= int(request.POST['bus_id']))
+        if bus.reserved >= bus.bus_capacity:
+            return HttpResponseBadRequest("Bus is full")
+
         seat_number = int(request.POST['seat_num'])
         print(seat_number)
         record = BusBooking.objects.create(
@@ -55,5 +80,7 @@ def book_bus(request):
             seat_number=seat_number
         )
         record.save()
+        bus.reserved += 1
+        bus.save()
         return redirect('/bus/bus_details/'+str(bus.bus_id))
     return HttpResponseBadRequest()

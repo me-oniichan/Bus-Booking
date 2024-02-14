@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "bus_auth.Users"
 
+LOGIN_URL = '/auth/login'
+
 # Application definition
 
 INSTALLED_APPS = [

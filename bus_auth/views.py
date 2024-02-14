@@ -17,8 +17,8 @@ def user_exist(user) -> bool:
 
 def home(request: HttpRequest):
     if user_exist(request.user):
-        return HttpResponse(f"<h1>{request.user.username}</h1>")
-    return HttpResponse("<h1>This is home page</h1>")
+        return redirect("/bus/dashboard")
+    return redirect("/auth/login")
 
 
 def signup(request: HttpRequest):

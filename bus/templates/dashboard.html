@@ -4,36 +4,43 @@
         <title>Dashboard</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     </head>
-    <body>
-        <h1>Welcome to the Dashboard</h1>
-        <form action="/bus/dashboard/" method="post">
+    <body class="container">
+        <div class="d-flex align-items-center">
+            <h1 class="m-auto">Welcome to the Dashboard</h1>
+        </div>
+        <form action="/bus/dashboard/" method="post" class="d-flex m-5">
             {% csrf_token %}
-            <select name="source_id">
+            <select name="source_id" class="form-select" style="max-width: 200px;">
                 <option value="">Select Source</option>
                 {% for station in stations %}
                 <option value="{{ station.station_id }}">{{ station.station_name }}</option>
                 {% endfor %}
             </select>
 
-            <select name="destination_id">
+            <select name="destination_id" class="form-select" style="max-width: 200px;">
                 <option value="">Select Destination</option>
                 {% for station in stations %}
                 <option value="{{ station.station_id }}">{{ station.station_name }}</option>
                 {% endfor %}
             </select>
-            <input type="submit" value="Search">
+            <input type="submit" value="Search" class="btn btn-primary btn-sm">
+            <a href="/bus/dashboard"><button type="button" class="btn btn-success">Clear</button></a>
         </form>
 
         {% if buses %}
-        <table>
-            <tr>
+        <table class="table table-strped table-bordered">
+            <thead class="table-dark">
                 <th>Bus Name</th>
                 <th>Bus Number</th>
                 <th>Bus Capacity</th>
                 <th>Bus Fare</th>
+                <th>Bus Status</th>
                 <th>Book</th>
-            </tr>
+            </thead>
             {% for bus in buses %}
 
             <tr>
@@ -41,6 +48,10 @@
                 <td>{{ bus.bus_number }}</td>
                 <td>{{ bus.bus_capacity }}</td>
                 <td>{{ bus.bus_fare }}</td>
+                <td>
+                    <div style="width: 20px; height: 20px; background: {{ bus.color }}; margin: auto">
+                    </div>
+                </td>
                 <td><a href="/bus/bus_details/{{ bus.bus_id }}">View</a></td>
             </tr>
             {% endfor %}
