@@ -41,6 +41,7 @@ class BusSchedule(models.Model):
 # Model to store bus booking
 class BusBooking(models.Model):
     booking_id = models.AutoField(primary_key=True)
-    schedule = models.ForeignKey(BusSchedule, on_delete=models.CASCADE)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    booking_date = models.DateField()
+    booking_date = models.DateField(auto_now=True)
+    seat_number = models.IntegerField(default=0)
+    bus_id = models.ForeignKey(Bus, on_delete=models.CASCADE, null=True)

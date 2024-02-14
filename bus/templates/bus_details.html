@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>Bus Details</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+        <h1>{{ bus.bus_name }} Details</h1>
+        
+        <div>
+            <div>
+                Bus Number: {{ bus.bus_number }}
+            </div>
+            <div>
+                Bus Capacity: {{ bus.bus_capacity }}
+            </div>
+            <div>
+                Bus Fare: {{ bus.bus_fare }}
+            </div>
+            
+            <div style="display: flex; gap: 60px;">
+                <div style="display: flex; gap: 20px;">
+                <div>
+                    {% for i in row1 %}
+                        <div class="seat">{{ i }}</div>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    {% for i in row2 %}
+                        <div class="seat">{{ i }}</div>
+                    {% endfor %}
+
+                </div>
+                </div>
+
+                <div style="display: flex; gap: 20px;">
+                <div>
+                    {% for i in row3 %}
+                        <div class="seat">{{ i }}</div>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    {% for i in row4 %}
+                        <div class="seat">{{ i }}</div>
+                    {% endfor %}
+                </div>
+                </div>
+                
+            </div>
+
+            <div>
+                <form action="/bus/bus_book" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="bus_id" value="{{ bus.bus_id }}">
+                    <input type="hidden" name="seat_num" id="seatnum" value="">
+                    <button type="submit">Book</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            let seatnum = document.getElementById('seatnum');
+            let seats = document.querySelectorAll('.seat');
+            seats.forEach(seat => {
+                seat.addEventListener('click', () => {
+                    seatnum.value = seat.innerText;
+                });
+            });
+        </script>
+    </body>
+</html>
