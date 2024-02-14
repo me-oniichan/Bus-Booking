@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Bus List</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <a href="/bus/add_bus"><button>Add bus </button></a>
+        <table>
+            <tr>
+                <th>Bus Name</th>
+                <th>Bus Number</th>
+                <th>Bus Capacity</th>
+                <th>Bus Fare</th>
+                <th>Bus Route</th>
+            </tr>
+            {% for bus in buses %}
+
+            <tr>
+                <td>{{ bus.bus_name }}</td>
+                <td>{{ bus.bus_number }}</td>
+                <td>{{ bus.bus_capacity }}</td>
+                <td>{{ bus.bus_fare }}</td>
+                <td><a href="/bus/show_route/{{ bus.bus_id }}">Route</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

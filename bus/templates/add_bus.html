@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Add Bus</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <form action="/bus/add_bus/" method="post">
+            {% csrf_token %}
+            <!-- render for using jinja -->
+
+            {% for field in form %}
+            <div>
+                {{ field.label }}
+                {{ field }}
+                {% if field.errors %}
+                <ul>
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit">Add Bus</button>
+        </form>
+    </body>
+</html>

@@ -16,13 +16,22 @@ class Bus(models.Model):
 class Station(models.Model):
     station_id = models.AutoField(primary_key=True)
     station_name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.station_name
 
 
+class Weeks(models.Model):
+    week_id = models.AutoField(primary_key=True)
+    week_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.week_name
+    
 # Model to store bus schedule
 class BusSchedule(models.Model):
     schedule_id = models.IntegerField()
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
-    schedule_date = models.DateField()
+    schedule_date = models.ForeignKey(Weeks, on_delete=models.CASCADE)
     schedule_time = models.TimeField()
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
 

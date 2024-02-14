@@ -21,5 +21,6 @@ from bus_auth.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home),
-    path('auth/', include("bus_auth.urls"))
+    path('auth/', include("bus_auth.urls")),
+    path('bus/', include("bus.urls"))
 ]

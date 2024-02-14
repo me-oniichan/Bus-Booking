@@ -1,0 +1,111 @@
+<html>
+    <head>
+        <title>Bus Route</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h3>Routes</h3>
+        <div>
+            {% for route in routes %}
+            <p>{{ route }}</p>
+            {% endfor %}
+        </div>
+
+        {% if is_superuser %}
+        <form action="/bus/bus_route" method="post">
+            {% csrf_token %}
+            <div id="container">
+ 
+                <div>
+                    <input type="hidden" name="form-TOTAL_FORMS" id="id_form-TOTAL_FORMS">
+                    <input type="hidden" name="form-INITIAL_FORMS" id="id_form-INITIAL_FORMS" value="0">
+                </div>
+            {% for form in forms %}
+            <div class="form-group">
+
+            <div class="form-field">
+                <label for="{{ form.bus.id_for_label }}">Weekday: </label>
+                {{ form.bus }}
+                {% if form.bus.errors %}
+                <ul>
+                    {% for error in form.bus.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.schedule_date.id_for_label }}">Weekday: </label>
+                {{ form.schedule_date }}
+                {% if form.schedule_date.errors %}
+                <ul>
+                    {% for error in form.schedule_date.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            
+            <div class="form-field">
+                <label for="{{ form.schedule_time.id_for_label }}">Time: </label>
+                {{ form.schedule_time }}
+                {% if form.schedule_time.errors %}
+                <ul>
+                    {% for error in form.schedule_time.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+
+                {% endif %}
+            </div>
+
+            <div class="form-field">
+                <label for="{{ form.station.id_for_label }}">Station: </label>
+                {{ form.station }}
+                {% if form.station.errors %}
+                <ul>
+                    {% for error in form.station.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            </div> 
+            </div>
+            {% endfor %}
+            <button id="add-form" type="button">Add Another Station</button>
+            <button type="submit">Add Route</button>
+            </form>
+        </form>
+        
+        <!-- dynamically add more forms -->
+        <script>
+            let count = 0;
+            document.getElementById('add-form').addEventListener('click', function() {
+                var form = document.querySelector('.form-group').cloneNode(true);
+                count+=1;
+                form.querySelectorAll('input').forEach(function(input) {
+                    input.name = input.name.replace('-0-', '-'+count+'-');
+                    input.id = input.id.replace('-0-', '-'+count+'-');
+                });
+                form.querySelectorAll('label').forEach(function(input) {
+                    input.htmlFor = input.htmlFor.replace('-0-', '-'+count+'-');
+                });
+                form.querySelectorAll('select').forEach(function(input) {
+                    input.name = input.name.replace('-0-', '-'+count+'-');
+                    input.id = input.id.replace('-0-', '-'+count+'-');
+                });
+                document.querySelector('#container').appendChild(form);
+                document.getElementById('id_form-TOTAL_FORMS').value = count+1;
+
+            });
+        </script>
+        <style>
+            .form-group {
+                margin-bottom: 10px;
+            }
+        </style>
+        {% endif %}
+    </body>
+</html>
